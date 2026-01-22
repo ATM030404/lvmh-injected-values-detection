@@ -8,10 +8,6 @@ Une **interface interactive Streamlit**, déployée en ligne, permet de tester f
 
 ## Application en ligne
 
-L’interface est accessible directement via un navigateur web :
-
- **https://lvmh-injected-values-detection-opzkz73genpnvhbcm7igq2.streamlit.app/**
-
 Elle permet de :
 - charger un fichier CSV contenant les colonnes `date` et `close`,
 - ajuster les paramètres du modèle,
