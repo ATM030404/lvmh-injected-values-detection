@@ -71,8 +71,14 @@ if not lancer:
 donnees["date"] = pd.to_datetime(donnees["date"], dayfirst=True, errors="coerce")
 donnees = donnees.dropna(subset=["date", "close"]).sort_values("date").reset_index(drop=True)
 
+# RETURN simple 
+donnees["return"] = (donnees["close"].pct_change() * 100).round(2)
+
+
+# Log-return
 donnees["log_return"] = np.log(donnees["close"]).diff()
-donnees = donnees.dropna(subset=["log_return"]).reset_index(drop=True)
+
+donnees = donnees.dropna(subset=["return", "log_return"]).reset_index(drop=True)
 
 donnees["roll_mean"] = donnees["log_return"].rolling(int(fenetre_rolling)).mean()
 donnees["roll_std"] = donnees["log_return"].rolling(int(fenetre_rolling)).std()
@@ -172,7 +178,17 @@ tab1, tab2, tab3 = st.tabs(["Isolation Forest (recommandé)", "LOF", "One-Class 
 
 def afficher_modele(nom, df_all, inj):
     st.write(f"**Nombre total de valeurs injectées détectées : {len(inj)}**")
-    cols = ["date", "close", "ratio_to_neighbors", "log_return", "zscore", "anomaly_score"]
+
+    cols = [
+        "date",
+        "close",
+        "return",
+        "ratio_to_neighbors",
+        "log_return",
+        "zscore",
+        "anomaly_score"
+    ]
+
     st.dataframe(inj[cols], use_container_width=True)
 
     csv_out = inj[cols].to_csv(index=False).encode("utf-8")
